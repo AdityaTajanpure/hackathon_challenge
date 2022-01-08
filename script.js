@@ -17,6 +17,7 @@ class Book {
 // Global variables
 let books = []
 let characters = []
+let initialBody = document.body.innerHTML
 
 
 //Function to get a book from Ice and Fire Api and parse it into a book object
@@ -33,11 +34,13 @@ async function getCharacterResponse(url) {
 // Function used to get number of books, as per requirement 50 books are required
 // But the api only returned books till index 12 so repeating same function
 async function getBooks() {
+    showLoading()
     for (let i = 1; i < 12; i++) {
         let response = await getBookResponse(i);
         books.push(response)
         console.log(`Pushed Book ${response}`);
     }
+    document.body.innerHTML = initialBody;
     showBooks()
 }
 
@@ -82,11 +85,9 @@ let bookOnTap = async (index) => {
     // Showing a loading indicator
 
     // Created a local copy of current body
-    var temp = document.body.innerHTML;
+    initialBody = document.body.innerHTML;
     //Added the code for progress indicator and styled it to be in center
-    document.body.innerHTML = `<div style = "position: absolute; top: 50%; right: 50%; transform: translateY(-50%, 50%)" class="spinner-border text-success">
-    <span class="visually-hidden"></span>
-</div>`
+    showLoading()
     //Getting data from the server
 
     await getCharacters(books[index])
@@ -104,11 +105,11 @@ let bookOnTap = async (index) => {
                 </div>
                 <div class="modal-body">
                     <p>Characters:</p>
-                    ${characters[0]}<br>
-                    ${characters[1]}<br>
-                    ${characters[2]}<br>
-                    ${characters[3]}<br>
-                    ${characters[4]}<br>
+                    ${characters[0].length > 0 ? characters[0] + '<br>' : ''}
+                    ${characters[1].length > 0 ? characters[1] + '<br>' : ''}
+                    ${characters[2].length > 0 ? characters[2] + '<br>' : ''}
+                    ${characters[3].length > 0 ? characters[3] + '<br>' : ''}
+                    ${characters[4].length > 0 ? characters[4] + '<br>' : ''}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -118,12 +119,18 @@ let bookOnTap = async (index) => {
         </div>
     </div>`
     $("#myModal").modal()
-    document.body.innerHTML = temp;
+    document.body.innerHTML = initialBody;
 
 
     console.log(books[index].name);
 
 }
 
+let showLoading = () => {
+    document.body.innerHTML = `<div style = "position: absolute; top: 50%; right: 50%; transform: translateY(-50%, 50%)" class="spinner-border text-success">
+    <span class="visually-hidden"></span>
+</div>`
+}
+
+
 getBooks().then(() => getBooks().then(() => getBooks()))
-alert('Click on particular book for their characters')
