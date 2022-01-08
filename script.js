@@ -88,20 +88,19 @@ let bookOnTap = async (index) => {
     <span class="visually-hidden"></span>
 </div>`
     //Getting data from the server
-    let book = books[index];
-    await getCharacters(book)
+
+    await getCharacters(books[index])
     //Got data from the server
 
     //Restoring body and hiding the spinner
-    document.body.innerHTML = temp;
 
     //Adding a pop up modal to display the characters list
-    document.body.innerHTML += `
+    document.body.innerHTML = `
     <div id="myModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">${book.name}</h4>
+                    <h4 class="modal-title">${books[index].name}</h4>
                 </div>
                 <div class="modal-body">
                     <p>Characters:</p>
@@ -119,6 +118,9 @@ let bookOnTap = async (index) => {
         </div>
     </div>`
     $("#myModal").modal()
+    document.body.innerHTML = temp;
+
+
     console.log(books[index].name);
 
 }
